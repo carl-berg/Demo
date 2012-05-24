@@ -8,9 +8,7 @@ namespace Demo.AnonymousTypes.Domain.Persistence.Queries
 	public class GetAllUsers : CommandQueryBase, IQuery<IEnumerable<User>>
 	{
 		public GetAllUsers()
-			: base(ConfigurationManager.ConnectionStrings["ActiveConnection"].ConnectionString)
-		{
-		}
+			: base(ConfigurationManager.ConnectionStrings["ActiveConnection"].ConnectionString) { }
 
 		public IEnumerable<User> Execute()
 		{
@@ -21,10 +19,10 @@ namespace Demo.AnonymousTypes.Domain.Persistence.Queries
 		{
 			return new User
 			{
-			    Email = Parse<User, string>(dataRecord, x => x.Email),
-			    FirstName = Parse<User, string>(dataRecord, x => x.FirstName),
-			    LastName = Parse<User, string>(dataRecord, x => x.LastName),
-			    Id = Parse<User, int>(dataRecord, x => x.Id)
+				Email = Parse<User, string>(dataRecord, x => x.Email),
+				FirstName = Parse<User, string>(dataRecord, x => x.FirstName),
+				LastName = Parse<User, string>(dataRecord, x => x.LastName),
+				Id = Parse<User, int>(dataRecord, x => x.Id)
 			};
 		}
 	}

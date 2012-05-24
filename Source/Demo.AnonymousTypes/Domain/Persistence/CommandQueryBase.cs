@@ -7,49 +7,49 @@ using System.Linq.Expressions;
 
 namespace Demo.AnonymousTypes.Domain.Persistence
 {
-    public abstract class CommandQueryBase
-    {
-        private readonly string _connectionString;
+	public abstract class CommandQueryBase
+	{
+		private readonly string _connectionString;
 
-        protected CommandQueryBase(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+		protected CommandQueryBase(string connectionString)
+		{
+			_connectionString = connectionString;
+		}
 
-        public IEnumerable<TType> Query<TType>(string query, Func<IDataRecord,TType> parser, object parameters = null)
-        {
+		public IEnumerable<TType> Query<TType>(string query, Func<IDataRecord,TType> parser, object parameters = null)
+		{
 			using (var sqlConnection = new SqlCeConnection(_connectionString))
-            {
-                sqlConnection.Open();
-                var command = BuildCommand(sqlConnection, query, parameters);
-                var reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    yield return parser(reader);
-                }
-            }
-        }
+			{
+				sqlConnection.Open();
+				var command = BuildCommand(sqlConnection, query, parameters);
+				var reader = command.ExecuteReader();
+				while (reader.Read())
+				{
+					yield return parser(reader);
+				}
+			}
+		}
 
-        public void Execute(string sql, object parameters = null)
-        {
+		public void Execute(string sql, object parameters = null)
+		{
 			using (var sqlConnection = new SqlCeConnection(_connectionString))
-            {
-                sqlConnection.Open();
-                var command = BuildCommand(sqlConnection, sql, parameters);
-                command.ExecuteNonQuery();
-            }
-        }
+			{
+				sqlConnection.Open();
+				var command = BuildCommand(sqlConnection, sql, parameters);
+				command.ExecuteNonQuery();
+			}
+		}
 
 		protected virtual SqlCeCommand BuildCommand(SqlCeConnection connection, string sql, object parameters)
-        {
-            var command = connection.CreateCommand();
-            command.CommandText = sql;
-        	foreach (var parameter in BuildParameters(parameters))
-        	{
-        		command.Parameters.Add(parameter);
-        	}
-            return command;
-        }
+		{
+			var command = connection.CreateCommand();
+			command.CommandText = sql;
+			foreach (var parameter in BuildParameters(parameters))
+			{
+				command.Parameters.Add(parameter);
+			}
+			return command;
+		}
 
 		protected virtual IEnumerable<SqlCeParameter> BuildParameters(object parameters)
 		{
@@ -69,6 +69,5 @@ namespace Demo.AnonymousTypes.Domain.Persistence
 			var name = memberExpression.Member.Name;
 			return (TOut) record[name];
 		}
-    }
-
+	}
 }
